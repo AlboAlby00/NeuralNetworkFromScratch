@@ -5,9 +5,11 @@ from loss import Loss_CategoricalCrossEntropy
 
 class Activation:
 
-    def forward(self,input):
+    def forward(self,inputs):
         pass
-
+    
+    def backward(self,dvalues):
+        pass
 
 
 class Activation_ReLU(Activation):
@@ -25,15 +27,23 @@ class Activation_ReLU(Activation):
 class Activation_Softmax(Activation):
 
     def forward(self, inputs):
+        self.inputs = inputs
         exp_input = np.exp(inputs - np.max(inputs,axis=1,keepdims=True))
         self.output = exp_input/np.sum(exp_input,axis=1,keepdims=True)
 
     def backward(self,dvalues):
-        self.dinputs=np.empty_like(dvalues)
-        for index, (single_output,single_dvalue) in enumerate(zip(self.output,dvalues)):
+        
+        self.dinputs=np.empty_like(dvalues,dtype=float)
+        for index, (single_output,single_dvalues) \
+             in enumerate(zip(self.output,dvalues)):
+            
             single_output = single_output.reshape(-1,1)
-            jacobian = np.diagflat(single_output) - np.dot(single_output.T,single_output)
-            self.dinputs[index] = np.dot(jacobian,single_dvalue)
+            jacobian = np.diagflat(single_output) - \
+                 np.dot(single_output,single_output.T)
+            # [ 0.21, -0.07, -0.14]
+            # self.dinputs[index] = np.dot(jacobian,single_dvalues)
+            self.dinputs[index] = np.dot(jacobian,single_dvalues)
+
 
 class Activation_Softmax_Loss_CategoricalCrossEntropy(Activation):
 

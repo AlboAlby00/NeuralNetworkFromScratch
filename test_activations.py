@@ -30,11 +30,14 @@ class Test_Softmax(unittest.TestCase):
 
     #TODO
     def test_backward(self):
-
-        softmax_output=np.array([0.7,0.1,0.2]).reshape(-1,1)
-        dvalues = np.array([[1,0,0]])
+      
+        dvalues = [[1,0,0],
+                   [1,0,0]]
         softmax = f.Activation_Softmax()
-        softmax.output = softmax_output
+        softmax.output = np.array([[0.7,0.1,0.2],
+                                  [0.7,0.1,0.2]])
         softmax.backward(dvalues=dvalues)
-        expected_dinputs = np.array([0.21,-0.07,-0.14]).reshape(-1,1)
+        #print(softmax.dinputs)
+        expected_dinputs = np.array([[0.21,-0.07,-0.14],
+                                    [0.21,-0.07,-0.14]])
         np.testing.assert_almost_equal(softmax.dinputs,expected_dinputs,decimal=1)

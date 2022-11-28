@@ -16,6 +16,8 @@ X = [[1,2,3,2.5],
 
 X,y = spiral_data(points=100,classes=3)
 
+
+
 dense1 = Layer_Dense(2,3)
 activation1 = Activation_ReLU()
 dense2 = Layer_Dense(3,3)
@@ -31,7 +33,6 @@ loss = Loss_CategoricalCrossEntropy()
 dvalues = np.array([[0.2,0.2,0.6],
                     [0.2,0.2,0.6]])
 
-print(dvalues.shape)
 
 
 
